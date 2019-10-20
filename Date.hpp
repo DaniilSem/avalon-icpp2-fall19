@@ -1,5 +1,5 @@
-п»ї#pragma once
-#include<iostream>
+#pragma once
+
 namespace ext
 {
 	enum class Month
@@ -18,18 +18,24 @@ namespace ext
 		December
 	};
 
-	enum DateFormat
+	enum class DateFormat
 	{
 		MonthAsInt,
 		MonthAsString
 	};
 
-	enum Season
+	enum class Season
 	{
 		Winter,
 		Spring,
 		Summer,
 		Autumn
+	};
+
+	enum class SortBy
+	{
+		Date,
+		Season
 	};
 
 	struct Date
@@ -45,248 +51,115 @@ namespace ext
 	};
 
 	/*
-		Г‚Г®Г§ГўГ°Г Г№Г ГҐГІ ГћГ«ГЁГ Г­Г±ГЄГіГѕ Г¤Г ГІГі
+		Возвращает Юлианскую дату
 		https://ru.wikipedia.org/wiki/%D0%AE%D0%BB%D0%B8%D0%B0%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D0%B4%D0%B0%D1%82%D0%B0
-		Г°Г Г§Г¤ГҐГ« "Г‚Г»Г·ГЁГ±Г«ГҐГ­ГЁГҐ Г­Г®Г¬ГҐГ°Г  ГѕГ«ГЁГ Г­Г±ГЄГ®ГЈГ® Г¤Г­Гї (JDN) ГЇГ® Г¤Г ГІГҐ ГЈГ°ГЁГЈГ®Г°ГЁГ Г­Г±ГЄГ®ГЈГ® ГЄГ Г«ГҐГ­Г¤Г Г°Гї"
-		Г’ГҐГ±ГІГ®ГўГ»ГҐ Г¤Г Г­Г­Г»ГҐ					ГЋГ¦ГЁГ¤Г ГҐГ¬Г»Г© Г°ГҐГ§ГіГ«ГјГІГ ГІ
+		раздел "Вычисление номера юлианского дня (JDN) по дате григорианского календаря"
+		Тестовые данные					Ожидаемый результат
 		1.12.2018					2458454
 		1.1.2018					2458120
 		1.6.2000					2451697
 		21.12.2012					2456283
 	*/
-	TimeDelta countJND(Date date)
-	{
-		unsigned int a, y, m;
-		a = (14 - static_cast<int> (date.month)) / 12;
-		y = date.year = 4800 - a;
-		m = static_cast<int>(date.month) + 12 * a - 3;
-		TimeDelta jdn;
-		jdn.delta = date.day + (153 * m + 2) / 5 + 365 * y
-			+ y / 4 - y / 100 + y / 400 - 32045;
-		return jdn;
-	}
+	TimeDelta countJND(Date date);
 
 	/*
-		ГђГ Г±Г±Г·ГЁГІГ»ГўГ ГҐГІ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г¤Г­ГҐГ© Г¬ГҐГ¦Г¤Гі Г¤ГўГіГ¬Гї Г¤Г ГІГ Г¬ГЁ.
-		ГЏГ°ГЁ Г°ГҐГ Г«ГЁГ§ГўГ Г¶ГЁГЁ ГЁГ±ГЇГ®Г«ГјГ§ГіГ©ГІГҐ CountJND
+		Рассчитывает количество дней между двумя датами.
+		При реализвации используйте CountJND
 	*/
-	TimeDelta countDistance(Date from, Date to)
-	{
-		TimeDelta delta;
-		delta.delta = countJND(to).delta - countJND(from).delta;
-		return delta;
-	}
+	TimeDelta countDistance(Date from, Date to);
 
 	/*
-		Г‚Г»ГўГ®Г¤ГЁГІ Гў ГЄГ®Г­Г±Г®Г«Гј
+		Выводит в консоль
 	*/
-	void print(Date data, DateFormat format = DateFormat::MonthAsInt)
-	{
-		std::cout << data.day << "/";
-		print(data.month, format);
-		std::cout << data.year << std::endl;
-	}
-	void printer(Month month)
-	{
-		if(static_cast<int>(month)==1)
-		{
-			std::cout <<"Januar"<<"/" ;
-		}
-		if (static_cast<int>(month) == 2)
-		{
-			std::cout << "February" << "/";
-		}
-		if (static_cast<int>(month) == 3)
-		{
-			std::cout << "March" << "/";
-		}
-		if (static_cast<int>(month) == 4)
-		{
-			std::cout << "April" << "/";
-		}
-		if (static_cast<int>(month) == 5)
-		{
-			std::cout << "May" << "/";
-		}
-		if (static_cast<int>(month) == 6)
-		{
-			std::cout << "June" << "/";
-		}
-		if (static_cast<int>(month) == 7)
-		{
-			std::cout << "July" << "/";
-		}
-		if (static_cast<int>(month) == 8)
-		{
-			std::cout << "August" << "/";
-		}
-		if (static_cast<int>(month) == 9)
-		{
-			std::cout << "September" << "/";
-		}
-		if (static_cast<int>(month) == 10)
-		{
-			std::cout << "October" << "/";
-		}
-		if (static_cast<int>(month) == 11)
-		{
-			std::cout << "November" << "/";
-		}
-		if (static_cast<int>(month) == 12)
-		{
-			std::cout << "December" << "/";
-		}
-	}
-	void print(Month month, DateFormat format = DateFormat::MonthAsInt)
-	{
-		if (format == DateFormat::MonthAsInt)
-		{
-			std::cout << static_cast<int>(month) << "/";
-		}
-		else
-		{
-			printer(month);
-		}
-	}
-	void print(TimeDelta delta)
-	{
-		std::cout << delta.delta << std::endl;
-	}
+	void print(Date data, DateFormat format = DateFormat::MonthAsInt);
+	void print(Month month, DateFormat format = DateFormat::MonthAsInt);
+	void print(TimeDelta delta);
 
 	/*
-		Г‚Г®Г§ГўГ°Г Г№Г ГҐГІ Г±ГҐГ§Г®Г­ (Г§ГЁГ¬Г , ГўГҐГ±Г­Г , Г«ГҐГІГ®, Г®Г±ГҐГ­Гј) ГЇГҐГ°ГҐГ¤Г ГўГ ГҐГ¬Г®Г© Г¤Г ГІГ»
+		Возвращает сезон (зима, весна, лето, осень) передаваемой даты
 	*/
-	Season getSeason(Date date)
-	{
-		if ((static_cast<int>(date.month) == 12) || (static_cast<int>(date.month) == 1) || (static_cast<int>(date.month) == 2))
-		{
-			std::cout << "Winter" << std::endl;
-		}
-		if ((static_cast<int>(date.month)>2)& (static_cast<int>(date.month)<6))
-		{
-			std::cout << "Spring" << std::endl;
-		}
-		if ((static_cast<int>(date.month) > 5) & (static_cast<int>(date.month) < 9))
-		{
-			std::cout << "Summer" << std::endl;
-		}
-		if ((static_cast<int>(date.month) > 8) & (static_cast<int>(date.month) < 12))
-		{
-			std::cout << "Fall" << std::endl;
-		}
-	}
-	Season getSeason(Month month)
-	{
-		if ((static_cast<int>(month) == 12) || (static_cast<int>(month) == 1) || (static_cast<int>(month) == 2))
-		{
-			std::cout << "Winter" << std::endl;
-		}
-		if ((static_cast<int>(month) > 2) & (static_cast<int>(month) < 6))
-		{
-			std::cout << "Spring" << std::endl;
-		}
-		if ((static_cast<int>(month) > 5) & (static_cast<int>(month) < 9))
-		{
-			std::cout << "Summer" << std::endl;
-		}
-		if ((static_cast<int>(month) > 8) & (static_cast<int>(month) < 12))
-		{
-			std::cout << "Fall" << std::endl;
-		}
-	}
+	Season getSeason(Date date);
+	Season getSeason(Month month);
 
 	/*
-		ГЌГ ГЇГЁГ±Г ГІГј ГЇГҐГ°ГҐГЈГ°ГіГ§ГЄГі Г¤Г«Гї Г±Г«ГҐГ¤ГіГѕГ№ГЁГµ Г«Г®ГЈГЁГ·ГҐГ±ГЄГЁГµ Г®ГЇГҐГ°Г ГІГ®Г°Г®Гў
+		Написать перегрузку для следующих логических операторов
 	*/
-	bool  operator == (const Date lhs, const Date rhs)
-	{
-		return lhs.day == rhs.day
-			&& lhs.month == rhs.month
-			&& lhs.year == rhs.year;
-	}
-	bool operator != (const Date lhs, const Date rhs)
-	{
-		return !(lhs == rhs);
-	}
-	bool operator < (const Date lhs, const Date rhs)
-	{
-		return lhs.day < rhs.day
-			&& lhs.month < rhs.month
-			&& lhs.year < rhs.year;
-	}
-	bool operator <= (const Date lhs, const Date rhs)
-	{
-		return(lhs == rhs) || (lhs < rhs);
-	}
-	bool operator > (const Date lhs, const Date rhs)
-	{
-		return lhs.day > rhs.day
-			&& lhs.month > rhs.month
-			&& lhs.year > rhs.year;
-	}
-	bool operator >= (const Date lhs, const Date rhs)
-	{
-		return (lhs == rhs) || (lhs > rhs);
-	}
+	bool operator == (const Date lhs, const Date rhs);
+	bool operator != (const Date lhs, const Date rhs);
+	bool operator < (const Date lhs, const Date rhs);
+	bool operator <= (const Date lhs, const Date rhs);
+	bool operator > (const Date lhs, const Date rhs);
+	bool operator >= (const Date lhs, const Date rhs);
 
 	/*
-		ГЌГ ГЇГЁГ±Г ГІГј ГЇГҐГ°ГҐГЈГ°ГіГ§ГЄГі Г¤Г«Гї Г±Г«ГҐГ¤ГіГѕГ№ГЁГµ Г Г°ГЁГґГ¬ГҐГІГЁГ·ГҐГ±ГЄГЁГµ Г®ГЇГҐГ°Г ГІГ®Г°Г®Г¬Гў
+		Написать перегрузку для следующих арифметических операторов
 	*/
-	Date operator + (const Date date, const TimeDelta delta)
-	{
-		Date daa;
-		daa.day = date.day + delta.delta;
-		return daa;
-	}
-	Date operator + (const TimeDelta delta, const Date date)
-	{
-		return (date + delta);
-	}
-	Date operator + (const TimeDelta delta, const TimeDelta date)
-	{
-		Date daa;
-		daa.day = delta.delta + date.delta;
-		return daa;
-	}
-	Date operator - (const Date date, const TimeDelta delta)
-	{
-		Date daa;
-		daa.day = date.day - delta.delta;
-		return daa;
-	}
-	Date operator - (const TimeDelta delta, const Date date)
-	{
-		Date daa;
-		daa.day = delta.delta - date.day;
-		return daa;
-	}
-	Date operator - (const TimeDelta delta, const TimeDelta date)
-	{
-		Date daa;
-		daa.day = delta.delta - date.delta;
-		return daa;
-	}
+	Date operator + (const Date date, const TimeDelta delta);
+	Date operator + (const TimeDelta delta, const Date date);
+	TimeDelta operator + (const TimeDelta lhs, const TimeDelta rhs);
+	Date operator - (const Date date, const TimeDelta delta);
+	Date operator - (const TimeDelta delta, const Date date);
+	TimeDelta operator - (const TimeDelta lhs, const TimeDelta rhs);
 
-	TimeDelta operator * (const TimeDelta delta, int multiplier)
-	{
-		TimeDelta	daa;
-		daa.delta = delta.delta * multiplier;
-		return daa;
-	}
-	TimeDelta operator * (int multiplier, const TimeDelta delta)
-	{
-		return delta * multiplier;
-	}
-	TimeDelta operator / (const TimeDelta delta, int multiplier)
-	{
-		TimeDelta daa;
-		daa.delta = delta.delta / multiplier;
-		return daa;
-	}
-	TimeDelta operator / (int multiplier, const TimeDelta delta)
-	{
-		TimeDelta daa;
-		daa.delta = multiplier / delta.delta;
-		return daa;
-	}
+	TimeDelta operator * (const TimeDelta delta, int multiplier);
+	TimeDelta operator * (int multiplier, const TimeDelta delta);
+	TimeDelta operator / (const TimeDelta delta, int multiplier);
+	TimeDelta operator / (int multiplier, const TimeDelta delta);
+
+	/*-----Часть для домашнего задания №4-----*/
+
+	TimeDelta& operator ++ ( TimeDelta& delta);
+	TimeDelta& operator ++ ( TimeDelta& delta, int);
+
+	TimeDelta& operator -- ( TimeDelta& delta);
+	TimeDelta& operator -- ( TimeDelta& delta, int);
+
+	Date& operator ++ ( Date& delta);
+	Date& operator ++ ( Date& delta, int);
+
+	Date& operator -- ( Date& delta);
+	Date& operator -- ( Date& delta, int);
+
+	/*
+		Меняет даты местами
+	*/
+	void swap(Date& lhs, Date& rhs);
+
+	/*
+		Меняет временные интервалы местами
+	*/
+	void swap(TimeDelta& lhs, TimeDelta& rhs);
+
+	/*
+		Возвращает ссылку на большую дату
+	*/
+	Date& max(Date& lhs, Date& rsh);
+
+	/*
+		Возвращает указатель на меньшую дату
+	*/
+	Date& min(Date& lhs, Date& rsh);
+
+	/*
+		Возвращает указатель на минимальную дату в переданном массиве дат
+	*/
+	Date& getMinDate(Date dates[], int size);
+
+	/*
+		Возвращает указатель на максимальную дату в переданном массиве дат
+	*/
+	Date& getMaxDate(Date dates[], int size);
+
+	/*
+		Сортирует массив дат по указанному критерию
+	*/
+	void sort(Date dates[], int size, SortBy sortBy = SortBy::Date);
+
+	/*
+		Проверяет может ли существовать дата с передаваемыми значениями.
+		В случае успеха возвращает true, и заполняет дату по переданному адресу.
+		Если дата с переданными параметрами существовать не может,
+		возвращает пустой указатель.
+	*/
+	Date* tryFillDate(int year, int month, int day);
 }
