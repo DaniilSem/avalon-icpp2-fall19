@@ -8,11 +8,12 @@ namespace DS
 		len = ext::GetRandomValue(1, 12);
 		return len;
 	}
-	Agent Fuller(Agent data[], int size)
+	void Fuller(Agent data[], int size)
 	{
 		int lenWork = WorkLen();
 		for (int i = 0; i < size; ++i)
 		{
+			data[i].LenWork = lenWork;
 			for (int j = 1; j < lenWork; ++j)
 			{
 				data[i].data[j] = ext::GetRandomValue(1000, 100000);
@@ -23,4 +24,25 @@ namespace DS
 			}
 		}
 	}
+	int HighMed(Agent data[], int size)
+	{
+		int sum, med;
+		int maxnum=0;
+		int max = 0;
+		for (int i = 0; i < size; ++i)
+		{
+			sum = 0;
+			for (int j = 0; j < data[i].LenWork; ++j)
+			{
+				sum += data[i].data[j];
+			}
+			med = sum / data[i].LenWork;
+			if (med > max) {
+				max = med;
+				maxnum = i;
+			}
+		}
+		return maxnum;
+	}
+	
 }
