@@ -5,7 +5,7 @@ namespace ds
 {
 	void print(CharString* ptr)
 	{
-		while (ptr!=nullptr)
+		while (ptr != nullptr)
 		{
 			std::cout << ptr->symbol;
 			ptr = ptr->nextSymbol;
@@ -18,10 +18,10 @@ namespace ds
 		{
 			throw std::exception("Nullptr");
 		}
-	
+
 		while (ptr->nextSymbol != nullptr)
 		{
-			ptr=ptr->nextSymbol;
+			ptr = ptr->nextSymbol;
 		}
 		ptr->nextSymbol = newSymbol;
 	}
@@ -33,7 +33,7 @@ namespace ds
 		{
 			throw std::exception("Nullptr");
 		}
-		while((ptr->nextSymbol != nullptr) && (count<num))
+		while ((ptr->nextSymbol != nullptr) && (count < num))
 		{
 			++count;
 			ptr = ptr->nextSymbol;
@@ -43,13 +43,13 @@ namespace ds
 	}
 	void removeChars(CharString* ptr, int tar, int dell)
 	{
-		CharString* temp=ptr;
+		CharString* temp = ptr;
 		if (ptr == nullptr)
 		{
 			throw std::exception("Nullptr");
 		}
 		int count = 1;
-		while (count<tar-1)
+		while (count < tar - 1)
 		{
 			++count;
 			temp = temp->nextSymbol;
@@ -65,8 +65,8 @@ namespace ds
 				temp = temp->nextSymbol;
 				delete dele;
 				ptr->nextSymbol = temp;
-				ptr = ptr->nextSymbol;
-				temp = temp->nextSymbol;
+				//ptr = ptr->nextSymbol;
+				//temp = temp->nextSymbol;
 			}
 			else
 			{
@@ -75,5 +75,28 @@ namespace ds
 				break;
 			}
 		}
+	}
+	void concatenate(CharString* str1, CharString* str2)
+	{
+		while(str1->nextSymbol!=nullptr)
+		{
+			str1=str1->nextSymbol;
+		}
+		str1->nextSymbol = str2;
+	}
+	CharString* substring(CharString* str, int position, int len)
+	{
+		for (int i = 1; i < position; ++i)
+		{
+			str = str->nextSymbol;
+		}
+		CharString* temp;
+		temp = str;
+		for (int i = 1; i < len; ++i)
+		{
+			temp = temp->nextSymbol;
+		}
+		temp->nextSymbol = nullptr;
+		return str;
 	}
 }
