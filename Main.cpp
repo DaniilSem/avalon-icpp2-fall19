@@ -7,30 +7,32 @@ struct Triangle
 	int c;
 	double perim;
 };
-int findIndex(int data[], int left, int right, int value)
+int findIndex( int left, int right, int value)
 {
-	int middle = (left + right) / 2;
-	if (data[middle] == value)
+	std::ifstream Input("Triangle.bin", std::ifstream::in | std::ifstream::binary);
+	int middle = (left + right) / 2; 
+	Triangle num{};
+	Input.seekg(middle*sizeof(num));
+	Input.read(reinterpret_cast<char*>(&num), sizeof(Triangle));
+	if (num.perim == value)
 	{
+		Input.close();
 		return middle;
 	}
-	if (data[middle] > value)
+	if (num.perim > value)
 	{
-		return findIndex(data, left, middle - 1, value);
+		Input.close();
+		return findIndex( left, middle - 1, value);
 	}
 	else
 	{
-		return findIndex(data, middle + 1, right, value);
+		Input.close();
+		return findIndex( middle + 1, right, value);
 	}
-}
-
-int findIndex(int data[], int size, int value)
-{
-	return findIndex(data, 0, size - 1, value);
 }
 int main()
 {
-	std::ifstream Input("Triangle.bin",std::ifstream::in|std::ifstream::binary);
+	std::ifstream Input("Triangle.bin", std::ifstream::in | std::ifstream::binary);
 	if (!Input.is_open())
 	{
 		std::cerr << "Error";
@@ -38,7 +40,9 @@ int main()
 	}
 	int perimetr;
 	std::cin >> perimetr;
-	int size;
+	int col;
 	Input.seekg(0, std::ios_base::end);
-	size = Input.tellg()/sizeof(Triangle);
+	col = Input.tellg() / sizeof(Triangle);
+	Input.close();
+	findIndex(1,col,perimetr);
 }
